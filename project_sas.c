@@ -95,10 +95,10 @@ void Ajouter_taches()
         struct tm tm = *localtime(&t);
 
         jeur1 = tm.tm_mday;
-        mois2 = ((tm.tm_mon+1) * 30);
+        mois2 = ((tm.tm_mon+1) * 31);
 
         days = tache[cont].dead.jeur - jeur1;
-        months = (tache[cont].dead.mois *30)- mois2;
+        months = (tache[cont].dead.mois *31)- mois2;
 
         // Mettre à jour les champs d’échéance
 
@@ -126,9 +126,9 @@ void tableauCase()
     int i;
     for (i = 0; i < cont; i++)
     {
-        printf("| %-20s | %-30s | %-15d | %-12d | %-20s |\n", tache[i].titre, tache[i].description, tache[i].dead.jeur, tache[i].id, tache[i].status);
+        printf("| %-20s | %-30s | %-15d |  %-12d | %-20s |\n", tache[i].titre, tache[i].description, tache[i].dead.jeur, tache[i].id, tache[i].status);
     }
-    printf("\n\n|----------------------------------------------------------------------------------------------------------------------|\n");
+        printf("--------------------------------------------------------------------------------------------------------------------\n");
 }
 // Fonction Affichage
 
@@ -194,12 +194,13 @@ void Afficher_liste()
             if(tache[i].dead.jeur <= 3)
             {
                 tableaux();
-                printf("|    %s    |    %5s |   %02d jeur    |   %d  |    %s    |\n\n",tache[i].titre,tache[i].description,tache[i].dead.jeur,tache[i].id,tache[i].status);
-                printf("\n\n|----------------------------------------------------------------------------------------------------------------------|\n");
+                 printf("| %-20s | %-30s | %-15d | %-12d | %-20s |\n", tache[i].titre, tache[i].description, tache[i].dead.jeur, tache[i].id, tache[i].status);
+                 printf("--------------------------------------------------------------------------------------------------------------------\n");
             }
             else if(tache[i].dead.jeur > 3)
             {
                 printf("\t\t !!! Il n\'y a pas de taches de moins de 3 jours !!! \n\n");
+                break;
             }
         }
     }
@@ -237,11 +238,10 @@ void Modifier_tache()
             struct tm tm = *localtime(&t);
 
             jeur1 = tm.tm_mday;
-            mois2 = ((tm.tm_mon+1) * 30);
-            annee2 = (tm.tm_year + 1900) * 365;
+            mois2 = ((tm.tm_mon+1) * 31);
 
             days = tache[i].dead.jeur - jeur1;
-            months = (tache[i].dead.mois *30)- mois2;
+            months = (tache[i].dead.mois *31)- mois2;
 
             tache[i].dead.jeur = days;
             tache[i].dead.mois = months;
@@ -275,12 +275,14 @@ void Rechercher_taches()
             {
                 exist = 1;
                 tableaux();
-                printf("\n |    %s    |    %5s |   %02d jeur  |   %d  |    %s    |\n",tache[i].titre, tache[i].description,tache[i].dead.jeur,tache[i].id,tache[i].status);
-                printf("\n\n|----------------------------------------------------------------------------------------------------------------------|\n");
+                 printf("| %-20s | %-30s | %-15d | %-12d | %-20s |\n", tache[i].titre, tache[i].description, tache[i].dead.jeur, tache[i].id, tache[i].status);
+                 printf("--------------------------------------------------------------------------------------------------------------------\n");
+                  break ;
             }
             if(exist == 0)
             {
                 printf("!!!! le idantifiant no disponible !!!!!!!");
+                 break ;
             }
             }
                 break ;
@@ -296,17 +298,18 @@ void Rechercher_taches()
                 exist = 1;
 
                 tableaux();
-                printf("\n |    %s    |    %5s |   %02d jeur  |   %d  |    %s    |\n",tache[i].titre, tache[i].description,tache[i].dead.jeur,tache[i].id,tache[i].status);
-                printf("\n\n|-------------------------------------------------------------------------------------------------------------------|\n");
+                 printf("| %-20s | %-30s | %-15d | %-12d | %-20s |\n", tache[i].titre, tache[i].description, tache[i].dead.jeur, tache[i].id, tache[i].status);
+                 printf("--------------------------------------------------------------------------------------------------------------------\n");
+                  break ;
                 }
-            if(exist == 0)
+            if(K != 0)
                 {
-                printf("!!!! le titre no disponible !!!!!!!");
+                printf("\n\n!!!! le titre no disponible !!!!!!!\n\n");
                 }
             }
                 break;
     default :
-            printf("!!!!!!! --> le nombre de choix no disponible!!! <--");
+            printf("\n\n!!!!!!! --> le nombre de choix no disponible!!! <--\n\n");
     }
 }
 
@@ -370,12 +373,12 @@ void Statistiques()
     printf("\t\t\t\t\t ------------------------------------------------ \n\n\n");
 
     for (i = 0 ; i < cont ; i++){
-        printf("\t\t\t\t\t---------------------------------------\n");
-        printf("\t\t\t\t\t|      id         |      deadline     |");
-        printf("\t\t\t\t\t---------------------------------------\n");
-        printf("\t\t\t\t\t--------------------------------------\n");
-        printf("\t\t\t\t\t|      %d        |     %02d  jeur    |\n",tache[i].id,tache[i].dead.jeur);
-        printf("\t\t\t\t\t--------------------------------------\n");
+        printf("\t\t\t\t\t------------------------------------------------------\n");
+        printf("\t\t\t\t\t|     %-12s      |     %-15s        |\n","Identifiant","Deadline (jeurs)");
+        printf("\t\t\t\t\t------------------------------------------------------\n");
+
+        printf("\t\t\t\t\t|     %-12d      |   %-15d jeur      |\n",tache[i].id,tache[i].dead.jeur);
+        printf("\t\t\t\t\t------------------------------------------------------\n");
     }
 }
 
@@ -389,15 +392,15 @@ int main()
 
     do
     {
-        printf("\n\n\t\t\t\t**************** liste de services: ****************\n");
-        printf("\t\t\t\t\t  -------------------------------------------\n ");
-        printf("\t\t\t\t\t | 1 --> Ajouter nouvelles taches            |\n ");
-        printf("\t\t\t\t\t | 2 --> Afficher la liste d\'taches         |\n ");
-        printf("\t\t\t\t\t | 3 --> Modifier une tache                 |\n ");
-        printf("\t\t\t\t\t | 4 --> Rechercher les taches              |\n ");
-        printf("\t\t\t\t\t | 5 --> Supprimer une tache                |\n ");
-        printf("\t\t\t\t\t | 6 --> Statistiques                       |\n ");
-        printf("\t\t\t\t\t  ------------------------------------------\n ");
+        printf("\n\n\t\t\t\t\t**************** liste de services: *********************\n");
+        printf("\t\t\t\t\t  ------------------------------------------------------\n ");
+        printf("\t\t\t\t\t | 1 --> Ajouter nouvelles taches                       |\n ");
+        printf("\t\t\t\t\t | 2 --> Afficher la liste d\'taches                     |\n ");
+        printf("\t\t\t\t\t | 3 --> Modifier une tache                             |\n ");
+        printf("\t\t\t\t\t | 4 --> Rechercher les taches                          |\n ");
+        printf("\t\t\t\t\t | 5 --> Supprimer une tache                            |\n ");
+        printf("\t\t\t\t\t | 6 --> Statistiques                                   |\n ");
+        printf("\t\t\t\t\t  ------------------------------------------------------\n ");
         printf("\n\n \t\t--------> entrez le numero de service  :    ");
         scanf("%d",&numeroservice);
         system("cls");
