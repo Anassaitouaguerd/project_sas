@@ -7,6 +7,18 @@ char titre[50],description[500];
 int sizetache = 0, i, j, sizetab = 0;
 int cont = 0, status;
 int finalle,debute,D[100] ;
+int days, months;
+int jeur1;
+int mois2;
+int annee2;
+
+
+
+/*typedef struct {
+    int jeur1;
+    int mois2;
+    int annee2;
+}date;*/
 
 
 typedef struct
@@ -14,8 +26,6 @@ typedef struct
     int mois;
     int jeur;
     int annee;
-    int jeur2;
-
 
 } deadline;
 
@@ -29,10 +39,12 @@ typedef struct
     char status[40];
     deadline dead;
 
+
 } task;
 
 task tache[100];
-;
+// date day;
+
 
 void Ajouter_taches()
 {
@@ -78,37 +90,34 @@ void Ajouter_taches()
 
         }
         while(status !=1 && status != 2 && status !=3);
+
+        time_t t = time(NULL);
+        struct tm tm = *localtime(&t);
+
+        jeur1 = tm.tm_mday;
+        mois2 = ((tm.tm_mon+1) * 30);
+        //annee2 = (tm.tm_year + 1900) * 365;
+
+        days = tache[cont].dead.jeur - jeur1;
+        months = (tache[cont].dead.mois *30)- mois2;
+
+        tache[cont].dead.jeur = days;
+        tache[cont].dead.mois = months;
+        tache[cont].dead.jeur = tache[cont].dead.jeur + months;
+
+
         cont ++;
-
     }
 }
-void DeadLine()
+/*void DeadLine()
 {
-
-
-    time_t t = time(NULL);
-    struct tm tm = *localtime(&t);
-
-    for( i = 0 ; i < cont ; i++)
-    {
-
-        tache[i].dead.jeur = tache[i].dead.jeur - tm.tm_mday;
-
-
-
-        if(tache[i].dead.mois == tm.tm_mon+1)
-        {
-            continue;
-        }
-        else if (tache[i].dead.mois!= tm.tm_mon+1)
-        {
-            tache[i].dead.jeur  = (tache[i].dead.mois * 30) - ((tm.tm_mon+1) * 30) + tache[i].dead.jeur ;
-        }
-
-
+    for(i = 0 ; i < cont ; i++){
+    tache[i].dead.jeur = tache[i].dead.jeur - day.jeur1;
+    tache[i].dead.jeur = (tache[i].dead.mois * 30) - day.mois2 + tache[i].dead.jeur;
     }
 
-}
+
+}*/
 void tableaux()
 {
     printf("--------------------------------------------------------------------------------------------------------------------\n");
@@ -134,18 +143,24 @@ void tableauCase()
 
 void Afficher_liste()
 {
-    int reponse ;
+
+    int reponse,exist = 0;
     task tri_alphabet;
     task tri_deadline;
+    /*for(i = 0 ; i < cont ; i++){
+    tache[i].dead.jeur = tache[i].dead.jeur - day.jeur1;
+    tache[i].dead.jeur = (tache[i].dead.mois * 30) - day.mois2 + tache[i].dead.jeur;
+    }*/
     printf("entrez le nombre de choix : \n");
     printf(" 1 - ALPHABET ***\n");
     printf(" 2 - deadline ***\n");
+    printf(" 3 - les taches dont le deadline est dans 3 jours ou moins ***\n");
     scanf("%d",&reponse);
-    DeadLine();
 
     switch(reponse)
     {
     case 1 :
+
         for(i = 0 ; i < cont ; i++)
         {
             for (j = i + 1 ; j < cont ; j++)
@@ -164,6 +179,7 @@ void Afficher_liste()
         tableauCase();
         break ;
     case 2 :
+
         for(i = 0 ; i < cont ; i++)
         {
             for( j = i + 1 ; j < cont ; j++)
@@ -179,7 +195,24 @@ void Afficher_liste()
         tableaux();
         tableauCase();
         break ;
+    case 3 :
+        for( i = 0 ; i < cont ; i++)
+        {
+
+            if(tache[i].dead.jeur <= 3)
+            {
+                tableaux();
+                printf("|    %s    |    %5s |   %02d jeur    |   %d  |    %s    |\n\n",tache[i].titre,tache[i].description,tache[i].dead.jeur,tache[i].id,tache[i].status);
+
+            }
+            else if(tache[i].dead.jeur > 3)
+            {
+                printf("\t\t !!! Il n\'y a pas de taches de moins de 3 jours !!! \n\n");
+            }
+        }
+
     }
+
 
 
 }
@@ -209,9 +242,23 @@ void Modifier_tache()
             printf("\t---> entrez le mois: ");
             scanf("%d",&tache[i].dead.mois);
 
+            time_t t = time(NULL);
+            struct tm tm = *localtime(&t);
+
+            jeur1 = tm.tm_mday;
+            mois2 = ((tm.tm_mon+1) * 30);
+            annee2 = (tm.tm_year + 1900) * 365;
+
+            days = tache[i].dead.jeur - jeur1;
+            months = (tache[i].dead.mois *30)- mois2;
+
+            tache[i].dead.jeur = days;
+            tache[i].dead.mois = months;
+            tache[i].dead.jeur = tache[i].dead.jeur + months;
+
         }
     }
-    DeadLine();
+
 
 }
 void Rechercher_taches()
@@ -316,7 +363,7 @@ void Statistiques()
             longeure2++;
         }
     }
- printf("\t\t\t\t\t ------------------------------------------------ \n");
+    printf("\t\t\t\t\t ------------------------------------------------ \n");
     printf("\t\t\t\t\t         le nombre des taches complete : %d           \n",longeure);
     printf("\t\t\t\t\t ------------------------------------------------ \n\n\n");
     printf("\t\t\t\t\t ------------------------------------------------ \n");
