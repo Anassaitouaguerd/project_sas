@@ -116,21 +116,19 @@ void Ajouter_taches()
 void tableaux()
 {
     printf("--------------------------------------------------------------------------------------------------------------------\n");
-    printf("|        titre        |     description        |     deadline     |       idantifiant            |         status  |\n");
+    printf("| %-20s | %-30s | %-15s | %-12s | %-20s |\n", "Titre", "Description", "deadline (jours)", "Identifiant", "Statut");
     printf("--------------------------------------------------------------------------------------------------------------------\n");
 }
 
-
-//Fonction Tableau des cas
-
+// Function to display task details in the formatted table
 void tableauCase()
 {
     int i;
-
     for (i = 0; i < cont; i++)
     {
-        printf("|    %s    |    %5s |   %02d jeur    |   %d  |    %s    |\n\n",tache[i].titre,tache[i].description,tache[i].dead.jeur,tache[i].id,tache[i].status);
+        printf("| %-20s | %-30s | %-15d | %-12d | %-20s |\n", tache[i].titre, tache[i].description, tache[i].dead.jeur, tache[i].id, tache[i].status);
     }
+    printf("\n\n|----------------------------------------------------------------------------------------------------------------------|\n");
 }
 // Fonction Affichage
 
@@ -197,6 +195,7 @@ void Afficher_liste()
             {
                 tableaux();
                 printf("|    %s    |    %5s |   %02d jeur    |   %d  |    %s    |\n\n",tache[i].titre,tache[i].description,tache[i].dead.jeur,tache[i].id,tache[i].status);
+                printf("\n\n|----------------------------------------------------------------------------------------------------------------------|\n");
             }
             else if(tache[i].dead.jeur > 3)
             {
@@ -277,6 +276,7 @@ void Rechercher_taches()
                 exist = 1;
                 tableaux();
                 printf("\n |    %s    |    %5s |   %02d jeur  |   %d  |    %s    |\n",tache[i].titre, tache[i].description,tache[i].dead.jeur,tache[i].id,tache[i].status);
+                printf("\n\n|----------------------------------------------------------------------------------------------------------------------|\n");
             }
             if(exist == 0)
             {
@@ -297,6 +297,7 @@ void Rechercher_taches()
 
                 tableaux();
                 printf("\n |    %s    |    %5s |   %02d jeur  |   %d  |    %s    |\n",tache[i].titre, tache[i].description,tache[i].dead.jeur,tache[i].id,tache[i].status);
+                printf("\n\n|-------------------------------------------------------------------------------------------------------------------|\n");
                 }
             if(exist == 0)
                 {
