@@ -57,10 +57,14 @@ void Ajouter_taches()
         gets(tache[cont].description);
         tache[cont].id = cont+2;
         printf("\n\n \t\t ******entrez la date final : ******\n ");
+        do{
         printf("\t---> entrez le jeur: ");
         scanf("%d",&tache[cont].dead.jeur);
+        }while(tache[cont].dead.jeur > 31 || tache[cont].dead.jeur <= 0);
+        do {
         printf("\t---> entrez le mois: ");
         scanf("%d",&tache[cont].dead.mois);
+        }while(tache[cont].dead.mois > 12 || tache[cont].dead.mois <= 0);
 
         do
         {
@@ -227,10 +231,14 @@ void Modifier_tache()
             tache[i].id = cont + 2;
 
             printf("\n\n \t\t ******entrez la date final : ******\n ");
-            printf("\t---> entrez le jeur: \n");
+            do{
+            printf("\t---> entrez le jeur: ");
             scanf("%d",&tache[i].dead.jeur );
+            }while(tache[i].dead.jeur > 31 || tache[i].dead.jeur <= 0);
+            do{
             printf("\t---> entrez le mois: ");
             scanf("%d",&tache[i].dead.mois);
+            }while(tache[i].dead.mois > 12 || tache[i].dead.mois <= 0);
               do
         {
             printf("\n\n\t\t ****** entrez status ******\n\n");
