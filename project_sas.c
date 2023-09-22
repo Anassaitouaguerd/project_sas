@@ -5,15 +5,13 @@
 
 // Global variables
 
-int numeroservice,heure, minute, jeur, id;
+int numeroservice,id;
 char titre[50],description[500];
-int sizetache = 0, i, j, sizetab = 0;
+int sizetache = 0, i, j;
 int cont = 0, status;
-int finalle,debute,D[100] ;
 int days, months;
 int jeur1;
 int mois2;
-int annee2;
 
 //Structure pour date final
 
@@ -100,7 +98,7 @@ void Ajouter_taches()
         days = tache[cont].dead.jeur - jeur1;
         months = (tache[cont].dead.mois *31)- mois2;
 
-        // Mettre à jour les champs d’échéance
+        // Mettre à jour les champs d’écheance
 
         tache[cont].dead.jeur = days;
         tache[cont].dead.mois = months;
@@ -233,6 +231,30 @@ void Modifier_tache()
             scanf("%d",&tache[i].dead.jeur );
             printf("\t---> entrez le mois: ");
             scanf("%d",&tache[i].dead.mois);
+              do
+        {
+            printf("\n\n\t\t ****** entrez status ******\n\n");
+            printf("\t\t ------------------------------------\n");
+            printf("\t\t |-->> 1 - realiser                 |\n");
+            printf("\t\t |-->> 2 - en cours de realisation  |\n");
+            printf("\t\t |-->> 3 - finalisee                |\n");
+            printf("\t\t ------------------------------------\n");
+            printf("\t\t ---------->>>> entrez le numero de status : ");
+            scanf("%d",&status);
+            switch(status)
+            {
+            case 1 :
+                strcpy(tache[i].status,"realiser");
+                break;
+            case 2 :
+                strcpy(tache[i].status,"en cours de realisation");
+                break;
+            case 3 :
+                strcpy(tache[i].status,"finalisee");
+                break;
+            }
+        }
+        while(status !=1 && status != 2 && status !=3);
 
             time_t t = time(NULL);
             struct tm tm = *localtime(&t);
