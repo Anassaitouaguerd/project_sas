@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -8,23 +7,15 @@ char titre[50],description[500];
 int sizetache = 0, i, j, sizetab = 0;
 int cont = 0, status;
 int finalle,debute,D[100] ;
-typedef struct
-{
-    int heure;
-    int jeur;
 
-} date_debut;
+
 typedef struct
 {
-    int heure2;
+    int mois;
+    int jeur;
+    int annee;
     int jeur2;
 
-} date_final;
-typedef struct
-{
-    date_debut debute;
-    date_final finalle;
-    int tridead;
 
 } deadline;
 
@@ -36,13 +27,12 @@ typedef struct
     char titre[50];
     char description[500];
     char status[40];
-
-
+    deadline dead;
 
 } task;
 
 task tache[100];
-deadline dead[100];
+;
 
 void Ajouter_taches()
 {
@@ -55,22 +45,13 @@ void Ajouter_taches()
         gets(tache[cont].titre);
         printf("\n\t --> entrez le description de tache : ");
         gets(tache[cont].description);
-
-
-        tache[cont].id = i+2;
-
-
-        printf("\t\t ******entrez la date debut : ******\n ");
-        printf("\t---> entrez le jeur: ");
-        scanf("%d",&dead[cont].debute.jeur);
-        printf("\n\t---> entrez le heure : ");
-        scanf("%d",&dead[cont].debute.heure);
-
+        tache[cont].id = cont+2;
         printf("\n\n \t\t ******entrez la date final : ******\n ");
         printf("\t---> entrez le jeur: ");
-        scanf("%d",&dead[cont].finalle.jeur2);
-        printf("\t---> entrez le heure : ");
-        scanf("%d",&dead[cont].finalle.heure2);
+        scanf("%d",&tache[cont].dead.jeur);
+        printf("\t---> entrez le mois: ");
+        scanf("%d",&tache[cont].dead.mois);
+
 
         do
         {
@@ -101,6 +82,33 @@ void Ajouter_taches()
 
     }
 }
+void DeadLine()
+{
+
+
+    time_t t = time(NULL);
+    struct tm tm = *localtime(&t);
+
+    for( i = 0 ; i < cont ; i++)
+    {
+
+        tache[i].dead.jeur = tache[i].dead.jeur - tm.tm_mday;
+
+
+
+        if(tache[i].dead.mois == tm.tm_mon+1)
+        {
+            continue;
+        }
+        else if (tache[i].dead.mois!= tm.tm_mon+1)
+        {
+            tache[i].dead.jeur  = (tache[i].dead.mois * 30) - ((tm.tm_mon+1) * 30) + tache[i].dead.jeur ;
+        }
+
+
+    }
+
+}
 void tableaux()
 {
     printf("--------------------------------------------------------------------------------------------------------------------\n");
@@ -118,7 +126,7 @@ void tableauCase()
     {
 
 
-        printf("|    %s    |    %5s |   %d   |   %d  |    %s    |\n\n",tache[i].titre, tache[i].description,dead[i].tridead,tache[i].id,tache[i].status);
+        printf("|    %s    |    %5s |   %02d jeur    |   %d  |    %s    |\n\n",tache[i].titre,tache[i].description,tache[i].dead.jeur,tache[i].id,tache[i].status);
     }
 
 }
@@ -128,10 +136,13 @@ void Afficher_liste()
 {
     int reponse ;
     task tri_alphabet;
+    task tri_deadline;
     printf("entrez le nombre de choix : \n");
     printf(" 1 - ALPHABET ***\n");
     printf(" 2 - deadline ***\n");
     scanf("%d",&reponse);
+    DeadLine();
+
     switch(reponse)
     {
     case 1 :
@@ -145,13 +156,29 @@ void Afficher_liste()
                     tri_alphabet = tache[i];
                     tache[i] = tache[j];
                     tache[j] = tri_alphabet;
+
                 }
             }
         }
         tableaux();
         tableauCase();
         break ;
-
+    case 2 :
+        for(i = 0 ; i < cont ; i++)
+        {
+            for( j = i + 1 ; j < cont ; j++)
+            {
+                if(tache[i].dead.jeur > tache[j].dead.jeur)
+                {
+                    tri_deadline = tache[i] ;
+                    tache[i] = tache[j] ;
+                    tache[j] = tri_deadline;
+                }
+            }
+        }
+        tableaux();
+        tableauCase();
+        break ;
     }
 
 
@@ -174,24 +201,17 @@ void Modifier_tache()
             printf("\n\t --> entrez le description de tache : ");
             gets(tache[i].description);
 
-
-            tache[i].id = (i + 1)*2 +4;
-
-
-            printf("\t\t ******entrez la date debut : ******\n ");
-            printf("\t---> entrez le jeur: ");
-            scanf("%d",&dead[i].debute.jeur);
-            printf("\n\t---> entrez le heure : ");
-            scanf("%d",&dead[i].debute.heure);
+            tache[i].id = cont + 2;
 
             printf("\n\n \t\t ******entrez la date final : ******\n ");
             printf("\t---> entrez le jeur: \n");
-            scanf("%d",&dead[i].finalle.jeur2);
-            printf("\t---> entrez le heure : ");
-            scanf("%d",&dead[i].finalle.heure2);
+            scanf("%d",&tache[i].dead.jeur );
+            printf("\t---> entrez le mois: ");
+            scanf("%d",&tache[i].dead.mois);
 
         }
     }
+    DeadLine();
 
 }
 void Rechercher_taches()
@@ -216,7 +236,7 @@ void Rechercher_taches()
             {
                 exist = 1;
                 tableaux();
-                printf("\n |    %s    |    %5s |   %d   |   %d  |    %s    |\n",tache[i].titre, tache[i].description,dead[i].tridead,tache[i].id,tache[i].status);
+                printf("\n |    %s    |    %5s |   %02d jeur  |   %d  |    %s    |\n",tache[i].titre, tache[i].description,tache[i].dead.jeur,tache[i].id,tache[i].status);
             }
             if(exist == 0)
             {
@@ -227,7 +247,7 @@ void Rechercher_taches()
 
     case 2 :
         printf("entrez le titre de tache :");
-        scanf("%s",&Tit);
+        scanf("%s", Tit);
         for( i = 0 ; i < cont ; i++)
         {
             K = strcmp(tache[i].titre, Tit);
@@ -236,7 +256,7 @@ void Rechercher_taches()
                 exist = 1;
 
                 tableaux();
-                printf("|    %s    |    %5s |   %d   |   %d  |    %s    |\n\n",tache[i].titre, tache[i].description,dead[i].tridead,tache[i].id,tache[i].status);
+                printf("\n |    %s    |    %5s |   %02d jeur  |   %d  |    %s    |\n",tache[i].titre, tache[i].description,tache[i].dead.jeur,tache[i].id,tache[i].status);
             }
             if(exist == 0)
             {
@@ -251,31 +271,57 @@ void Rechercher_taches()
 }
 void Supprimer_tache()
 {
-    int index , exist = 0;
+    int index, exist = 0;
     tableaux();
     tableauCase();
     printf("\t ------ >> entrez le identifiant de la tache : ");
     scanf("%d",&index);
-    for( i = 0 ; i < cont ; i++){
-        if(index == tache[i].id){
-                exist = 1;
+    for( i = 0 ; i < cont ; i++)
+    {
+        if(index == tache[i].id)
+        {
+            exist = 1;
             tache[i] = tache[i+1];
             cont --;
         }
-        if(exist == 0){
+        if(exist == 0)
+        {
             printf("------ !!!! le identifiant no disponible !!!! ---- ");
         }
     }
 
 
 }
-void Statistiques(){
+void Statistiques()
+{
     int temp = cont ;
+    char incomplete[50] = "realiser";
+    char complete [50] =   "finalisee";
+    int longeure=0, longeure2=0;
+
     printf("\t\t\t\t\t ------------------------------------------------ \n");
     printf("\t\t\t\t\t         le nombre des taches est : %d           \n",temp);
     printf("\t\t\t\t\t ------------------------------------------------ \n\n\n");
-
-
+    for(i =0 ; i < cont ; i++)
+    {
+        if(strcmp(complete, tache[i].status)==0)
+        {
+            longeure++;
+        }
+    }
+    for(i =0 ; i < cont ; i++)
+    {
+        if(strcmp(incomplete, tache[i].status)==0)
+        {
+            longeure2++;
+        }
+    }
+ printf("\t\t\t\t\t ------------------------------------------------ \n");
+    printf("\t\t\t\t\t         le nombre des taches complete : %d           \n",longeure);
+    printf("\t\t\t\t\t ------------------------------------------------ \n\n\n");
+    printf("\t\t\t\t\t ------------------------------------------------ \n");
+    printf("\t\t\t\t\t         le nombre des taches incomplete : %d           \n",longeure2);
+    printf("\t\t\t\t\t ------------------------------------------------ \n\n\n");
 }
 
 
@@ -318,12 +364,12 @@ int main()
             break;
 
         case 5 :
-        Supprimer_tache();
-        break;
+            Supprimer_tache();
+            break;
 
         case 6 :
-        Statistiques();
-        break;
+            Statistiques();
+            break;
 
 
         default :
@@ -337,5 +383,3 @@ int main()
 
     return 0;
 }
-
-
