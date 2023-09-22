@@ -284,14 +284,15 @@ void Modifier_tache()
 
 void Rechercher_taches()
 {
-    int rep, K,exist = 0;
-    int N;
+    int rep, K;
+    int N ;
     char Tit[50];
 
     printf("\n\t\t\t----------------------------\n");
     printf("\t\t\t |1 - chercher par Identifiant  |\n");
     printf("\t\t\t |2 - chercher par titre        |\n");
     printf("\n\t\t\t----------------------------\n");
+    printf("\n\t\t\t entrer le choix ");
     scanf("%d",&rep);
 
     switch(rep)
@@ -303,16 +304,10 @@ void Rechercher_taches()
             {
             if(tache[i].id == N)
             {
-                exist = 1;
+
                 tableaux();
                  printf("| %-20s | %-30s | %-15d | %-12d | %-20s |\n", tache[i].titre, tache[i].description, tache[i].dead.jeur, tache[i].id, tache[i].status);
                  printf("--------------------------------------------------------------------------------------------------------------------\n");
-                  break ;
-            }
-            if(exist == 0)
-            {
-                printf("!!!! le idantifiant no disponible !!!!!!!");
-                 break ;
             }
             }
                 break ;
@@ -325,16 +320,10 @@ void Rechercher_taches()
             K = strcmp(tache[i].titre, Tit);
             if(K == 0)
                 {
-                exist = 1;
-
                 tableaux();
                  printf("| %-20s | %-30s | %-15d | %-12d | %-20s |\n", tache[i].titre, tache[i].description, tache[i].dead.jeur, tache[i].id, tache[i].status);
                  printf("--------------------------------------------------------------------------------------------------------------------\n");
                   break ;
-                }
-            if(K != 0)
-                {
-                printf("\n\n!!!! le titre no disponible !!!!!!!\n\n");
                 }
             }
                 break;
